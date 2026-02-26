@@ -1,27 +1,26 @@
 ﻿@page "/"
 @inherits AbstractPage
-@using System.Net.Http
-@using Nexar.Client.Token
 
 <br />
 <MudForm>
     <MudCard>
         <MudCardContent>
-            <MudText Typo="Typo.h4" GutterBottom="true">Sign In</MudText>
-            <MudText>Don't have an account? <MudLink Href=@AppData.NexarDotCom Target="_blank">Sign Up</MudLink></MudText>
-
-            <MudTextField @bind-Value=@_clientId Label="Client ID" Placeholder="Client ID"
-                          Variant=Variant.Outlined id="username" name="username"></MudTextField>
-            <MudTextField @bind-Value=@_clientSecret Label="Client secret" Placeholder="Client secret"
-                          Variant=Variant.Outlined InputType=@InputType.Password id="password" name="password" autocomplete="off" />
+            <MudText Typo=Typo.h4 GutterBottom=true>Connect</MudText>
+            <MudText>Don't have a token? See <MudLink Href="https://github.com/AltiumDeveloper/octopart-api-demo#readme" Target="_blank">README</MudLink></MudText>
+            <MudTextField @bind-Value=@_token
+                          Label="Access token"
+                          Variant=Variant.Outlined
+                          Adornment=Adornment.Start
+                          AdornmentIcon=@Icons.Material.Filled.ContentPaste
+                          OnAdornmentClick="PasteToken" />
         </MudCardContent>
         <MudCardActions>
-            <MudButton Color=Color.Primary OnClick=@LoginAsync>Sign In</MudButton>
+            <MudButton Color=Color.Primary OnClick=@ConnectAsync>Connect</MudButton>
         </MudCardActions>
     </MudCard>
 </MudForm>
 
-@if (_loading)
+@if (_connecting)
 {
     <MudProgressLinear Indeterminate=true />
 }
@@ -30,26 +29,23 @@
     [Parameter]
     [SupplyParameterFromQuery(Name = "token")]
     public string? TokenParameter { get; init; }
-
-    string? _clientId;
-    string? _clientSecret;
-    bool _loading;
-
+    
+    string? _token;
+    bool _connecting;
+    
     /// <summary>
-    /// Get token from the user input, then go to search.
+    /// Connect with the input token.
     /// </summary>
-    async Task LoginAsync()
+    async Task ConnectAsync()
     {
-        if (string.IsNullOrEmpty(_clientId) || string.IsNullOrEmpty(_clientSecret))
+        if (string.IsNullOrEmpty(_token))
             return;
 
+        _connecting = true;
         try
         {
-            _loading = true;
-            using var client = new HttpClient();
-            AppData.Token = await client.GetNexarTokenAsync(_clientId, _clientSecret, AppData.Authority);
+            AppData.Token = _token; 
             NavManager.NavigateTo("search");
-
         }
         catch (Exception ex)
         {
@@ -57,7 +53,7 @@
         }
         finally
         {
-            _loading = false;
+            _connecting = false;
         }
     }
 
@@ -94,5 +90,12 @@
         {
             await ShowErrorAndResetAsync(ex.Message);
         }
+    }
+    
+    private async Task PasteToken()
+    {
+        var (ok, value) = await JS.InvokeAsyncWithErrorHandling<string>("navigator.clipboard.readText");
+        if (ok)
+            _token = value;
     }
 }

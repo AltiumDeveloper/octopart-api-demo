@@ -1,14 +1,21 @@
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using System.Threading.Tasks;
+using Microsoft.JSInterop;
 
-namespace Nexar.Supply.Pages;
+namespace Altium.Supply.Pages;
 
 /// <summary>
 /// Common base page with handy members.
 /// </summary>
 public class AbstractPage : ComponentBase
 {
+    /// <summary>
+    /// Common JS interop.
+    /// </summary>
+    [Inject]
+    public IJSRuntime JS { get; init; } = null!;
+    
     /// <summary>
     /// Modal message boxes.
     /// </summary>

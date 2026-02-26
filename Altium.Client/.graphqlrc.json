@@ -3,8 +3,8 @@
   "documents": "**/*.graphql",
   "extensions": {
     "strawberryShake": {
-      "name": "NexarClient",
-      "namespace": "Nexar.Client",
+      "name": "AltiumClient",
+      "namespace": "Altium.Client",
       "url": "https://api.nexar.com/graphql"
     }
   }

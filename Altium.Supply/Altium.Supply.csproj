@@ -10,10 +10,9 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="9.0.0" PrivateAssets="all" />
     <PackageReference Include="MudBlazor" Version="8.0.0" />
-    <PackageReference Include="Nexar.Client.Token" Version="0.2.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.3.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Nexar.Client\Nexar.Client.csproj" />
+    <ProjectReference Include="..\Altium.Client\Altium.Client.csproj" />
   </ItemGroup>
 </Project>

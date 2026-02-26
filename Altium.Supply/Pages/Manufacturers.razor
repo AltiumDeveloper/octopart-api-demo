@@ -1,17 +1,17 @@
-@page "/sellers"
+@page "/manufacturers"
 @inherits AbstractPage
-@inject NexarClient Client
-@using Element = Nexar.Client.ISellers_SupSellers
+@inject AltiumClient Client
+@using Element = Altium.Client.IManufacturers_SupManufacturers
 
-<MudText Typo="Typo.h4" GutterBottom="true">Sellers</MudText>
+<MudText Typo="Typo.h4" GutterBottom="true">Manufacturers</MudText>
 
-@if (_sellers is null)
+@if (_manufacturers is null)
 {
     <MudProgressLinear Indeterminate=true />
 }
 else
 {
-    <MudTable Items="@_sellers" Filter="FilterElement">
+    <MudTable Items="@_manufacturers" Filter="FilterElement">
         <ToolBarContent>
             <MudSpacer />
             <MudTextField @bind-Value="_filterString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search"></MudTextField>
@@ -34,16 +34,16 @@ else
 
 @code {
     string _filterString = string.Empty;
-    IReadOnlyList<Element>? _sellers;
+    IReadOnlyList<Element>? _manufacturers;
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            var res = await Client.Sellers.ExecuteAsync();
+            var res = await Client.Manufacturers.ExecuteAsync();
             var data = res.AssertNoErrors();
 
-            _sellers = data.SupSellers;
+            _manufacturers = data.SupManufacturers;
         }
         catch (Exception ex)
         {

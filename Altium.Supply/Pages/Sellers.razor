@@ -1,32 +1,30 @@
-@page "/attributes"
+@page "/sellers"
 @inherits AbstractPage
-@inject NexarClient Client
-@using Element = Nexar.Client.IAttributes_SupAttributes
+@inject AltiumClient Client
+@using Element = Altium.Client.ISellers_SupSellers
 
-<MudText Typo="Typo.h4" GutterBottom="true">Attributes</MudText>
+<MudText Typo="Typo.h4" GutterBottom="true">Sellers</MudText>
 
-@if (_attributes is null)
+@if (_sellers is null)
 {
     <MudProgressLinear Indeterminate=true />
 }
 else
 {
-    <MudTable Items="@_attributes" Filter="FilterElement">
+    <MudTable Items="@_sellers" Filter="FilterElement">
         <ToolBarContent>
             <MudSpacer />
             <MudTextField @bind-Value="_filterString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search"></MudTextField>
         </ToolBarContent>
         <HeaderContent>
             <MudTh>ID</MudTh>
-            <MudTh>Shortname</MudTh>
             <MudTh>Name</MudTh>
-            <MudTh>Group</MudTh>
+            <MudTh>Homepage</MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="ID">@context.Id</MudTd>
-            <MudTd DataLabel="Shortname">@context.Shortname</MudTd>
             <MudTd DataLabel="Name">@context.Name</MudTd>
-            <MudTd DataLabel="Group">@context.Group</MudTd>
+            <MudTd DataLabel="Homepage"><MudLink Href="@context.HomepageUrl" Target="_blank">@context.HomepageUrl</MudLink></MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager />
@@ -36,16 +34,16 @@ else
 
 @code {
     string _filterString = string.Empty;
-    IReadOnlyList<Element>? _attributes;
+    IReadOnlyList<Element>? _sellers;
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            var res = await Client.Attributes.ExecuteAsync();
+            var res = await Client.Sellers.ExecuteAsync();
             var data = res.AssertNoErrors();
 
-            _attributes = data.SupAttributes;
+            _sellers = data.SupSellers;
         }
         catch (Exception ex)
         {
@@ -58,6 +56,6 @@ else
         return
             string.IsNullOrWhiteSpace(_filterString) ||
             element.Name.Contains(_filterString, StringComparison.OrdinalIgnoreCase) ||
-            element.Shortname.Contains(_filterString, StringComparison.OrdinalIgnoreCase);
+            (element.HomepageUrl is { } x ? x.Contains(_filterString, StringComparison.OrdinalIgnoreCase) : false);
     }
 }

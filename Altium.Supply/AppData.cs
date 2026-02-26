@@ -1,6 +1,6 @@
 using System;
 
-namespace Nexar.Supply;
+namespace Altium.Supply;
 
 /// <summary>
 /// The application parameters and state.
@@ -8,19 +8,14 @@ namespace Nexar.Supply;
 public static class AppData
 {
     /// <summary>
-    /// The identity server endpoint.
-    /// </summary>
-    public const string Authority = "https://identity.nexar.com/";
-
-    /// <summary>
-    /// The Nexar GraphQL API endpoint.
+    /// The GraphQL API endpoint.
     /// </summary>
     public const string ApiEndpoint = "https://api.nexar.com/graphql";
 
     /// <summary>
-    /// The Nexar home page.
+    /// The Altium home page.
     /// </summary>
-    public const string NexarDotCom = "https://nexar.com";
+    public const string AltiumDotCom = "https://altium.com";
 
     /// <summary>
     /// The current session token.

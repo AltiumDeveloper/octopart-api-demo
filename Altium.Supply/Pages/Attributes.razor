@@ -1,30 +1,32 @@
-@page "/manufacturers"
+@page "/attributes"
 @inherits AbstractPage
-@inject NexarClient Client
-@using Element = Nexar.Client.IManufacturers_SupManufacturers
+@inject AltiumClient Client
+@using Element = Altium.Client.IAttributes_SupAttributes
 
-<MudText Typo="Typo.h4" GutterBottom="true">Manufacturers</MudText>
+<MudText Typo="Typo.h4" GutterBottom="true">Attributes</MudText>
 
-@if (_manufacturers is null)
+@if (_attributes is null)
 {
     <MudProgressLinear Indeterminate=true />
 }
 else
 {
-    <MudTable Items="@_manufacturers" Filter="FilterElement">
+    <MudTable Items="@_attributes" Filter="FilterElement">
         <ToolBarContent>
             <MudSpacer />
             <MudTextField @bind-Value="_filterString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search"></MudTextField>
         </ToolBarContent>
         <HeaderContent>
             <MudTh>ID</MudTh>
+            <MudTh>Shortname</MudTh>
             <MudTh>Name</MudTh>
-            <MudTh>Homepage</MudTh>
+            <MudTh>Group</MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="ID">@context.Id</MudTd>
+            <MudTd DataLabel="Shortname">@context.Shortname</MudTd>
             <MudTd DataLabel="Name">@context.Name</MudTd>
-            <MudTd DataLabel="Homepage"><MudLink Href="@context.HomepageUrl" Target="_blank">@context.HomepageUrl</MudLink></MudTd>
+            <MudTd DataLabel="Group">@context.Group</MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager />
@@ -34,16 +36,16 @@ else
 
 @code {
     string _filterString = string.Empty;
-    IReadOnlyList<Element>? _manufacturers;
+    IReadOnlyList<Element>? _attributes;
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            var res = await Client.Manufacturers.ExecuteAsync();
+            var res = await Client.Attributes.ExecuteAsync();
             var data = res.AssertNoErrors();
 
-            _manufacturers = data.SupManufacturers;
+            _attributes = data.SupAttributes;
         }
         catch (Exception ex)
         {
@@ -56,6 +58,6 @@ else
         return
             string.IsNullOrWhiteSpace(_filterString) ||
             element.Name.Contains(_filterString, StringComparison.OrdinalIgnoreCase) ||
-            (element.HomepageUrl is { } x ? x.Contains(_filterString, StringComparison.OrdinalIgnoreCase) : false);
+            element.Shortname.Contains(_filterString, StringComparison.OrdinalIgnoreCase);
     }
 }

@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "Nexar.Supply": {
+    "Altium.Supply": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {

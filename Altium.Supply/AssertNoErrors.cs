@@ -3,7 +3,7 @@ using System;
 using System.Diagnostics;
 using System.Text;
 
-namespace Nexar.Client;
+namespace Altium.Client;
 
 public static class IOperationResult_AssertNoErrors
 {
